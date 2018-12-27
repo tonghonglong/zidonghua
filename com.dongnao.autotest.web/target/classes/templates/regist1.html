@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>注册</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<link rel="stylesheet" href="/static/css/login.css" type="text/css" />
+</head>
+<body>
+	<div class="container">
+		<div class="login_head">
+			<div class="login_logo"></div>
+			注册
+		</div>
+		<div class="lan">
+			<a href="/login">登录</a> <span style="color: #888">
+		</div>
+		<div class="login_content">
+			<div class="login-main">
+				<div class="login-pane" style="height: 220px">
+				<form id="form1">
+					<input id="name" name="name" type="text" placeholder="请输入用户名" /> 
+					<input name="password" type="password" placeholder="请输入密码" /> 
+						<input name="password2" type="password" placeholder="请再次输入密码" />
+						<div>
+						 <input id = "gender1" name="gender" type="radio"  value="1" checked = "checked" style="display:inline;width:60px;margin-left:-80px"/> 
+						 <label for ="gender1">男</label>
+						 <input id ="gender2" name="gender" type="radio"  value="0" style="display:inline;width:60px"/>
+						 <label for ="gender2">女</label>
+						 </div>
+					<button class="blue" onclick="regist();">注册</button>
+					<p>
+						<a class="left">Forgot your password?</a><a class="right">Please
+							try to contact Jose!</a>
+					</p>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="login_foot">Copyright©2013-2017 dongnaoedu.com All
+			Rights Reserved.</div>
+	</div>
+    <div th:include="/include/footer::footer"></div>
+	<script type="text/javascript" th:inline="javascript">
+	
+	    function vaildForm(){
+	    	var $name = $("#name");
+	    	var $password =$("input[name=password]");
+	    	var $password2 =$("input[name=password2]");
+	    	var $gender =$("input[name=gender]:checked").val();
+	    	if($name.val().length<1){
+	    		alert("请输入用户名");
+	    		return false;
+	    	}
+	    	if($password.val().length<1){
+	    		alert("请输入密码");
+	    		return false;
+	    	}
+	    	if($password2.val().length<1){
+	    		alert("请再次输入密码");
+	    		return false;
+	    	}else if($password2.val()!=$password.val()){
+	    		alert("两次输入的密码不一致");
+	    		return false;
+	    	}
+	    	return true;
+	    	
+	    	
+	    }
+		function regist() {
+			var isValid =vaildForm();
+			if(isValid){
+				 $.ajax({
+			            //几个参数需要注意一下
+			                type: "POST",//方法类型
+			                dataType: "json",//预期服务器返回的数据类型
+			                url: "/register" ,//
+			                data: $('#form1').serialize(),
+			                comtentType:"application/x-www-form-urlencoded;charset=utf-8",
+			                success: function (data,textStatus,jqXHR) {
+			                    //console.log(result);//打印服务端返回的数据(调试用)
+			                    if (data.success) {
+			                        alert(data.message);
+			                        document.location="/login";
+			                    }else{
+			                    	alert("注册失败");
+			                    }
+			                    
+			                },
+			                error : function(jqXHR,textStatus,errorThrown) {
+			                    alert("异常！");
+			                }
+			            });
+			}
+			
+			
+			
+		}
+		$(function() {
+
+		});
+	</script>
+</body>
+</html>
